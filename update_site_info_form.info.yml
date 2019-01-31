@@ -1,0 +1,4 @@
+name: Update Site Information Form
+description: Update site information form to add new field
+core: 8.x
+type: module

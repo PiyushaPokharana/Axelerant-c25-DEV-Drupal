@@ -1,0 +1,32 @@
+<?php
+use Drupal\Core\Form\FormStateInterface;
+
+/*Alter the hook_form to the update the Site Information Form*/
+function update_site_info_form_form_alter(&$form, $form_state, $form_id){
+
+    if($form_id == "system_site_information_settings"){
+        /*Set the config factory to store the form field values*/
+        $config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
+        /*Created new field*/
+        $form['site_api_key'] = array(
+            '#type' => 'textfield',
+            '#title' => t('Site API Key'),
+            '#attributes' => array('placeholder' => t('No API Key yet')),
+            '#default_value' => $config->get('siteapikeyval')
+        );
+        /*Changed the text of submit button on form*/
+        $form['actions']['submit']['#value'] = t('Update Configuration');
+        /*Call the custom function on submit*/
+        $form['actions']['submit']['#submit'][] = 'submit_site_info_form';
+    }
+  }
+
+ /*Custom function on submitting the site information form*/
+function submit_site_info_form(array $form, FormStateInterface $form_state){
+    $config = \Drupal::service('config.factory')->getEditable('siteapikey.settings');
+    /*Fetch the value of submitted API Key*/
+    $apiKeyValue = $form_state->getValue('site_api_key');
+    $config->set('siteapikeyval',$apiKeyValue)->save();
+    drupal_set_message("Site API Key has been saved. ".$apiKeyValue);
+
+}
