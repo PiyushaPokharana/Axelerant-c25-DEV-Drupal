@@ -1,0 +1,7 @@
+update_site_info.page_json:
+  path: '/page_json/{apikey}/{node}'
+  defaults:
+    _controller: '\Drupal\update_site_info_form\Controller\PageJson::GenerateJsonResponse'
+    _title: 'Login Page Redirect'
+  requirements:
+    _access: 'TRUE'
